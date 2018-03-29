@@ -15,10 +15,10 @@
       file: path={{ doc_root }} state=directory owner=www-data group=www-data
 
     - name: Set up HTML file
-      copy: src=/tmp/packer-provisioner-ansible-local/web/index.html dest={{ doc_root }}/index.html owner=www-data group=www-data mode=0644
+      copy: src=./web/index.html dest={{ doc_root }}/index.html owner=www-data group=www-data mode=0644
 
     - name: Set up Apache virtual host file
-      template: src=/tmp/packer-provisioner-ansible-local/vhost.tpl dest=/etc/apache2/sites-available/000-default.conf
+      template: src=./packer/vhost.tpl dest=/etc/apache2/sites-available/000-default.conf
       notify: restart apache
   handlers:
     - name: restart apache

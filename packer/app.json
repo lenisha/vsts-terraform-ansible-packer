@@ -37,9 +37,8 @@
       "inline": [
         "sudo apt-get update",
         "sudo apt-get upgrade -y",
-        "sudo apt-get install ansible -y",
-        "sudo mkdir /tmp/packer-provisioner-ansible-local-{{ user `random_path`}}"
-      ],
+        "sudo apt-get install ansible -y"
+       ],
       "inline_shebang": "/bin/sh -x",
       "type": "shell"
     },
