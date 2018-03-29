@@ -43,7 +43,7 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "./apache.yml"
+      "playbook_file": "apache.yml"
     },       
     {
     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
