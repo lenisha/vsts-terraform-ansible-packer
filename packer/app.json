@@ -44,11 +44,6 @@
       "type": "shell"
     },
     {
-      "type": "file",
-      "source": "{{user `playbook_drop_path`}}",
-      "destination": "/tmp/packer-provisioner-ansible-local-{{ user `random_path`}}"
-    },
-    {
       "type": "ansible-local",
       "playbook_file": "{{user `playbook_drop_path`}}/packer/apache.yml",
       "playbook_dir": "{{user `playbook_drop_path`}}/"
