@@ -36,15 +36,20 @@
       "inline": [
         "sudo apt-get update",
         "sudo apt-get upgrade -y",
-        "sudo apt-get install ansible -y"
-  
+        "sudo apt-get install ansible -y",
+        "mkdir /tmp/packer-provisioner-ansible-local"
       ],
       "inline_shebang": "/bin/sh -x",
       "type": "shell"
     },
     {
+      "type": "file",
+      "source": "{{user `playbook_drop_path`}}",
+      "destination": "/tmp/packer-provisioner-ansible-local"
+    },
+    {
       "type": "ansible-local",
-      "playbook_file": "{{user `playbook_drop_path`}}/apache.yml"
+      "playbook_file": "/tmp/packer-provisioner-ansible-local/apache.yml"
     },       
     {
     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
