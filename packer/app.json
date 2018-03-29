@@ -6,7 +6,8 @@
     "resource_group": "{{env `ARM_RESOURCE_GROUP`}}",
     "storage_account": "{{env `ARM_STORAGE_ACCOUNT`}}",
     "subscription_id": "{{env `ARM_SUBSCRIPTION_ID`}}",
-    "playbook_drop_path": ""
+    "playbook_drop_path": "",
+    "random_path": "{{timestamp}}"
   },
   "builders": [{
     "type": "azure-arm",
@@ -37,7 +38,7 @@
         "sudo apt-get update",
         "sudo apt-get upgrade -y",
         "sudo apt-get install ansible -y",
-        "mkdir /tmp/packer-provisioner-ansible-local"
+        "sudo mkdir /tmp/packer-provisioner-ansible-local-{{ user `random_path`}}"
       ],
       "inline_shebang": "/bin/sh -x",
       "type": "shell"
@@ -45,11 +46,12 @@
     {
       "type": "file",
       "source": "{{user `playbook_drop_path`}}",
-      "destination": "/tmp/packer-provisioner-ansible-local"
+      "destination": "/tmp/packer-provisioner-ansible-local-{{ user `random_path`}}"
     },
     {
       "type": "ansible-local",
-      "playbook_file": "{{user `playbook_drop_path`}}/packer/apache.yml"
+      "playbook_file": "{{user `playbook_drop_path`}}/packer/apache.yml",
+      "playbook_dir": "{{user `playbook_drop_path`}}/"
     },       
     {
     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
