@@ -13,3 +13,7 @@ variable "region" {
 variable "zone" {
   default = "northamerica-northeast1-a"
 }
+
+variable "baked_image_url" {
+  default = ""
+}

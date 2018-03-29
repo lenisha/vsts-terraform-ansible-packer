@@ -1,6 +1,7 @@
 #!/bin/bash
 ls -la
-echo "************* execute terraform apply"
+echo "************* execute terraform apply  terraform apply -auto-approve -var baked_image_url=$6"
+
 ## execute terrafotm build and sendout to packer-build-output
 export ARM_CLIENT_ID=$1
 export ARM_CLIENT_SECRET=$2
