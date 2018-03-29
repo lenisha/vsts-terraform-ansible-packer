@@ -13,8 +13,8 @@ provider "azurerm" {}
 
 # Create a resource group if it doesn’t exist
 resource "azurerm_resource_group" "demo_resource_group" {
-  name     = "packerdemo"
-  location = "eastus"
+  name     = "packerdemocreate"
+  location = "Canada Central"
 
   tags {
     environment = "Packer Demo"
@@ -25,7 +25,7 @@ resource "azurerm_resource_group" "demo_resource_group" {
 resource "azurerm_virtual_network" "demo_virtual_network" {
   name                = "packerdemo"
   address_space       = ["10.0.0.0/16"]
-  location            = "eastus"
+  location            = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
 
   tags {
@@ -44,7 +44,7 @@ resource "azurerm_subnet" "demo_subnet" {
 # Create public IPs
 resource "azurerm_public_ip" "demo_public_ip" {
   name                         = "packerpublicip"
-  location                     = "eastus"
+  location                     = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name          = "${azurerm_resource_group.demo_resource_group.name}"
   public_ip_address_allocation = "static"
 
@@ -56,7 +56,7 @@ resource "azurerm_public_ip" "demo_public_ip" {
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "demo_security_group" {
   name                = "packersecuritygroups"
-  location            = "eastus"
+  location            = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
 
   security_rule {
@@ -91,7 +91,7 @@ resource "azurerm_network_security_group" "demo_security_group" {
 # Create network interface
 resource "azurerm_network_interface" "demo_nic" {
   name                      = "myNIC"
-  location                  = "eastus"
+  location                  = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name       = "${azurerm_resource_group.demo_resource_group.name}"
   network_security_group_id = "${azurerm_network_security_group.demo_security_group.id}"
 
@@ -121,7 +121,7 @@ resource "random_id" "randomId" {
 resource "azurerm_storage_account" "demo_storage_account" {
   name                     = "diag${random_id.randomId.hex}"
   resource_group_name      = "${azurerm_resource_group.demo_resource_group.name}"
-  location                 = "eastus"
+  location                 = "${azurerm_resource_group.demo_resource_group.location}"
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
@@ -132,7 +132,7 @@ resource "azurerm_storage_account" "demo_storage_account" {
 
 resource "azurerm_image" "demo_image" {
   name                = "acctest"
-  location            = "eastus"
+  location            = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
 
   os_disk {
@@ -146,7 +146,7 @@ resource "azurerm_image" "demo_image" {
 # Create virtual machine
 resource "azurerm_virtual_machine" "demo_vm" {
   name                  = "packerVM"
-  location              = "eastus"
+  location              = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name   = "${azurerm_resource_group.demo_resource_group.name}"
   network_interface_ids = ["${azurerm_network_interface.demo_nic.id}"]
   vm_size               = "Standard_DS1_v2"
