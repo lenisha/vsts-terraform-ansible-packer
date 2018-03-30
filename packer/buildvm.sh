@@ -12,6 +12,6 @@ export ARM_TENANT_ID=$6
 
 echo "************* execute packer build"
 ## execute packer build and sendout to packer-build-output file
-packer build ./app.json -var playbook_drop_path=$7
+packer build  -var playbook_drop_path=$7 ./app.json
 
  cat azuredeploy.parameters.json
