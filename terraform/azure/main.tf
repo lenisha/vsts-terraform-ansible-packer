@@ -161,7 +161,7 @@ resource "azurerm_virtual_machine" "demo_vm" {
   network_interface_ids = ["${azurerm_network_interface.demo_nic.id}"]
   vm_size               = "Standard_DS1_v2"
 
-  storage_profile_image_reference {
+  storage_image_reference {
     id = "${data.azurerm_image.image.id}"
   }
 
