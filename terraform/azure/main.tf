@@ -47,6 +47,7 @@ resource "azurerm_public_ip" "demo_public_ip" {
   location                     = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name          = "${azurerm_resource_group.demo_resource_group.name}"
   public_ip_address_allocation = "static"
+  domain_name_label            = "demopackeriac"
 
   tags {
     environment = "Packer Demo"
@@ -188,4 +189,8 @@ resource "azurerm_virtual_machine" "demo_vm" {
 
 output "vm_ip" {
   value = "${azurerm_public_ip.demo_public_ip.ip_address}"
+}
+
+output "vm_dns" {
+  value = "http://${azurerm_public_ip.demo_public_ip.domain_name_label}.canadacentral.cloudapp.azure.com"
 }
