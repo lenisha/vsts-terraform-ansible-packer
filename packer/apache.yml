@@ -15,7 +15,9 @@
       file: path={{ doc_root }} state=directory owner=www-data group=www-data
 
     - name: Set up HTML file
-      copy: src=./web/index.html dest={{ doc_root }}/index.html owner=www-data group=www-data mode=0644
+      copy: src={{ item }} dest={{ doc_root }}/ owner=www-data group=www-data mode=0644
+      with_fileglob:
+        - ./web/*
 
     - name: Set up Apache virtual host file
       template: src=./packer/vhost.tpl dest=/etc/apache2/sites-available/000-default.conf
