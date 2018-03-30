@@ -24,7 +24,7 @@
     "image_sku": "16.04.0-LTS",
 
     "managed_image_resource_group_name": "managed-images",
-    "managed_image_name": "demoPackerImage",
+    "managed_image_name": "demoPackerImage-{{timestamp}}",
 
     "location": "Canada Central",
     "vm_size": "Basic_A1"

@@ -136,7 +136,7 @@ data "azurerm_resource_group" "image" {
 }
 
 data "azurerm_image" "image" {
-  name                = "demoPackerImage"
+  name                = "${var.manageddiskname}"
   resource_group_name = "managed-images"
 }
 

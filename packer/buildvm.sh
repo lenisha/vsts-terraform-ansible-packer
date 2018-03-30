@@ -9,9 +9,12 @@ export ARM_SUBSCRIPTION_ID=$5
 export ARM_TENANT_ID=$6
 
 
-
+rm packer-build-output.log
 echo "************* execute packer build"
 ## execute packer build and sendout to packer-build-output file
-packer build  -var playbook_drop_path=$7 ./app.json
+packer build  -var playbook_drop_path=$7 ./app.json 2>&1 | tee packer-build-output.log
 
- cat azuredeploy.parameters.json
+export manageddiskname=$(cat packer-build-output.log | grep ManagedImageName: | awk '{print $2}')
+
+echo $manageddiskname
+echo "##vso[task.setvariable variable=manageddiskname]$manageddiskname"
