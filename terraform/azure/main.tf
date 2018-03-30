@@ -131,18 +131,18 @@ resource "azurerm_storage_account" "demo_storage_account" {
   }
 }
 
-resource "azurerm_image" "demo_image" {
-  name                = "demoimage"
-  location            = "${azurerm_resource_group.demo_resource_group.location}"
-  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+#resource "azurerm_image" "demo_image" {
+#  name                = "demoimage"
+#  location            = "${azurerm_resource_group.demo_resource_group.location}"
+#  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
 
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    blob_uri = "${var.baked_image_url}"
-    size_gb  = 30
-  }
-}
+#  os_disk {
+#    os_type  = "Linux"
+#    os_state = "Generalized"
+#    blob_uri = "${var.baked_image_url}"
+#    size_gb  = 30
+#  }
+#}
 
 # Create virtual machine
 resource "azurerm_virtual_machine" "demo_vm" {
@@ -152,22 +152,30 @@ resource "azurerm_virtual_machine" "demo_vm" {
   network_interface_ids = ["${azurerm_network_interface.demo_nic.id}"]
   vm_size               = "Standard_DS1_v2"
 
+  #storage_os_disk {
+  #  name              = "myOsDisk"
+  #   caching           = "ReadWrite"
+  #  create_option     = "FromImage"
+  #  managed_disk_type = "Premium_LRS"
+  #}
+
+
+  #storage_image_reference {
+  #  id = "${azurerm_image.demo_image.id}"
+  #}
+
   storage_os_disk {
-    name              = "myOsDisk"
-    caching           = "ReadWrite"
-    create_option     = "FromImage"
-    managed_disk_type = "Premium_LRS"
+    name          = "my-osdisk1"
+    image_uri     = "${var.baked_image_url}"
+    vhd_uri       = "https://${azurerm_storage_account.demo_storage_account.name}.blob.core.windows.net/vhds/my-osdisk.vhd"
+    os_type       = "Linux"
+    caching       = "ReadWrite"
+    create_option = "FromImage"
   }
-
-  storage_image_reference {
-    id = "${azurerm_image.demo_image.id}"
-  }
-
   os_profile {
     computer_name  = "myvm"
     admin_username = "azureuser"
   }
-
   os_profile_linux_config {
     disable_password_authentication = true
 
@@ -176,12 +184,10 @@ resource "azurerm_virtual_machine" "demo_vm" {
       key_data = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDzWnLrGQrrR/1ghPRWzRVGLi64vMv+h+Wqx1BbgjHBUJd+TmJwrt8jJn7g/lMt9v2nkPU31B5iFeJJei5E/ShPAhxss4N5/J4fP6Uxq3iXcDC9LdC3P4wdQh5bxTYN1ruQtPpmyTPrLpfK++SPu42pAiAoAWdiw7s/WXLzxNALWsl2zrpNqTK9OdrDWmDFeu7PzVGxJ3cPEhPHfxzBTmj87vN5obSGr7uHrmtDwX5+5l6UscyWLdC6q6Wbk/SW8bICfccXJua3yddtXb5sx8jSivo99qusSpE8uUrpzFz9XFlARJQWtO0fsZKnK+yxZktcGNh8FvI89AU7iW4A180z lenisha@Terraform"
     }
   }
-
   boot_diagnostics {
     enabled     = "true"
     storage_uri = "${azurerm_storage_account.demo_storage_account.primary_blob_endpoint}"
   }
-
   tags {
     environment = "Terraform Demo"
   }
