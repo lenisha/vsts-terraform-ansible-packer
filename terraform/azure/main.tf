@@ -131,18 +131,27 @@ resource "azurerm_storage_account" "demo_storage_account" {
   }
 }
 
-resource "azurerm_image" "demo_image" {
-  name                = "demoimage"
-  location            = "${azurerm_resource_group.demo_resource_group.location}"
-  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
-
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    blob_uri = "${var.baked_image_url}"
-    size_gb  = 30
-  }
+data "azurerm_resource_group" "image" {
+  name = "packer-rg"
 }
+
+data "azurerm_image" "image" {
+  name                = "demoPackerImage"
+  resource_group_name = "${data.azurerm_resource_group.image.name}"
+}
+
+#resource "azurerm_image" "demo_image" {
+#  name                = "demoimage"
+#  location            = "${azurerm_resource_group.demo_resource_group.location}"
+#  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+
+#  os_disk {
+#    os_type  = "Linux"
+#    os_state = "Generalized"
+#    blob_uri = "${var.baked_image_url}"
+#    size_gb  = 30
+#  }
+#}
 
 # Create virtual machine
 resource "azurerm_virtual_machine" "demo_vm" {
@@ -152,15 +161,15 @@ resource "azurerm_virtual_machine" "demo_vm" {
   network_interface_ids = ["${azurerm_network_interface.demo_nic.id}"]
   vm_size               = "Standard_DS1_v2"
 
+  storage_profile_image_reference {
+    id = "${data.azurerm_image.image.id}"
+  }
+
   storage_os_disk {
     name              = "myOsDisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Premium_LRS"
-  }
-
-  storage_image_reference {
-    id = "${azurerm_image.demo_image.id}"
   }
 
   os_profile {
