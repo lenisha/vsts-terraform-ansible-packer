@@ -137,7 +137,7 @@ data "azurerm_resource_group" "image" {
 
 data "azurerm_image" "image" {
   name                = "demoPackerImage"
-  resource_group_name = "${data.azurerm_resource_group.image.name}"
+  resource_group_name = "managed-images"
 }
 
 #resource "azurerm_image" "demo_image" {
