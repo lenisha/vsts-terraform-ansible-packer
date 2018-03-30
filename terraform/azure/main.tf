@@ -163,9 +163,10 @@ resource "azurerm_virtual_machine" "demo_vm" {
   #  id = "${azurerm_image.demo_image.id}"
   #}
   storage_os_disk {
-    name          = "myOsDisk"
-    image_uri     = "${var.baked_image_url}"
-    vhd_uri       = "https://${azurerm_storage_account.demo_storage_account.name}.blob.core.windows.net/vhds/mydemo-osdisk.vhd"
+    name      = "myOsDisk"
+    image_uri = "${var.baked_image_url}"
+
+    #vhd_uri       = "https://${azurerm_storage_account.demo_storage_account.name}.blob.core.windows.net/vhds/mydemo-osdisk.vhd"
     os_type       = "Linux"
     caching       = "ReadWrite"
     create_option = "FromImage"
