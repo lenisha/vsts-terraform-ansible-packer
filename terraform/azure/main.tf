@@ -131,18 +131,18 @@ resource "azurerm_storage_account" "demo_storage_account" {
   }
 }
 
-resource "azurerm_image" "demo_image" {
-  name                = "acctest"
-  location            = "${azurerm_resource_group.demo_resource_group.location}"
-  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+#resource "azurerm_image" "demo_image" {
+#  name                = "acctest"
+#  location            = "${azurerm_resource_group.demo_resource_group.location}"
+#  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
 
-  os_disk {
-    os_type  = "Linux"
-    os_state = "Generalized"
-    blob_uri = "${var.baked_image_url}"
-    size_gb  = 30
-  }
-}
+#  os_disk {
+#    os_type  = "Linux"
+#    os_state = "Generalized"
+#    blob_uri = "${var.baked_image_url}"
+#    size_gb  = 30
+#  }
+#}
 
 # Create virtual machine
 resource "azurerm_virtual_machine" "demo_vm" {
