@@ -168,7 +168,7 @@ resource "azurerm_virtual_machine" "demo_vm" {
   storage_os_disk {
     name              = "myOsDisk"
     caching           = "ReadWrite"
-    create_option     = "FromImage"
+    create_option     = "Attach"
     managed_disk_type = "Premium_LRS"
   }
 
