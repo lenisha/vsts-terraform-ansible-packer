@@ -152,10 +152,6 @@ resource "azurerm_storage_account" "demo_storage_account" {
   }
 }
 
-#data "azurerm_resource_group" "image" {
-#  name = "packer-rg"
-#}
-
 data "azurerm_image" "image" {
   name                = "${var.manageddiskname}"
   resource_group_name = "managed-images"
@@ -211,11 +207,6 @@ resource "azurerm_virtual_machine_scale_set" "vmss" {
     }
   }
 
-  boot_diagnostics {
-    enabled     = "true"
-    storage_uri = "${azurerm_storage_account.demo_storage_account.primary_blob_endpoint}"
-  }
-
   tags {
     environment = "Terraform Demo"
   }
@@ -225,6 +216,9 @@ output "vm_ip" {
   value = "${azurerm_public_ip.demo_public_ip.ip_address}"
 }
 
+output "vm_dns" {
+  value = "http://${azurerm_public_ip.demo_public_ip.domain_name_label}.canadacentral.cloudapp.azure.com"
+}
 output "vm_dns" {
   value = "http://${azurerm_public_ip.demo_public_ip.domain_name_label}.canadacentral.cloudapp.azure.com"
 }
