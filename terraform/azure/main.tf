@@ -165,6 +165,8 @@ resource "azurerm_virtual_machine" "demo_vm" {
     id = "${data.azurerm_image.image.id}"
   }
 
+  managed_disk_id = "${data.azurerm_image.image.id}"
+
   storage_os_disk {
     name              = "myOsDisk"
     caching           = "ReadWrite"
