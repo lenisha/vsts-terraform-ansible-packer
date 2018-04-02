@@ -131,9 +131,9 @@ resource "azurerm_storage_account" "demo_storage_account" {
   }
 }
 
-data "azurerm_resource_group" "image" {
-  name = "packer-rg"
-}
+#data "azurerm_resource_group" "image" {
+#  name = "packer-rg"
+#}
 
 data "azurerm_image" "image" {
   name                = "${var.manageddiskname}"
