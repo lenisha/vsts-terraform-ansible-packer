@@ -177,10 +177,10 @@ resource "azurerm_virtual_machine" "demo_vm" {
   }
 
   storage_os_disk {
-    name              = "mydisk"
+    name              = "myOsDisk"
     caching           = "ReadWrite"
     create_option     = "FromImage"
-    managed_disk_type = "Standard_LRS"
+    managed_disk_type = "Premium_LRS"
   }
 
   os_profile {
