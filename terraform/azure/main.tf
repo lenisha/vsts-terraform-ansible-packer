@@ -160,7 +160,7 @@ data "azurerm_image" "image" {
 # Create virtual machine sclae set
 resource "azurerm_virtual_machine_scale_set" "vmss" {
   name                = "vmscaleset"
-  location            = "eastus"
+  location            = "${azurerm_resource_group.demo_resource_group.location"
   resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
   upgrade_policy_mode = "Manual"
 
@@ -216,9 +216,6 @@ output "vm_ip" {
   value = "${azurerm_public_ip.demo_public_ip.ip_address}"
 }
 
-output "vm_dns" {
-  value = "http://${azurerm_public_ip.demo_public_ip.domain_name_label}.canadacentral.cloudapp.azure.com"
-}
 output "vm_dns" {
   value = "http://${azurerm_public_ip.demo_public_ip.domain_name_label}.canadacentral.cloudapp.azure.com"
 }
