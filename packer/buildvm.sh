@@ -10,7 +10,7 @@ export ARM_TENANT_ID=$6
 
 
 rm packer-build-output.log
-echo "************* execute packer build"
+echo "************* execute packer build drop path $7"
 ## execute packer build and sendout to packer-build-output file
 packer build  -var playbook_drop_path=$7 ./app.json 2>&1 | tee packer-build-output.log
 
