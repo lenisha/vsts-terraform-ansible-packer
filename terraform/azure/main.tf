@@ -140,6 +140,15 @@ data "azurerm_image" "image" {
   resource_group_name = "managed-images"
 }
 
+resource "azurerm_managed_disk" "test" {
+  name                 = "datadisk_existing"
+  resource_group_name  = "${azurerm_resource_group.demo_resource_group.name}"
+  location             = "${azurerm_resource_group.demo_resource_group.location}"
+  storage_account_type = "Standard_LRS"
+  create_option        = "Empty"
+  disk_size_gb         = "40"
+}
+
 #resource "azurerm_image" "demo_image" {
 #  name                = "demoimage"
 #  location            = "${azurerm_resource_group.demo_resource_group.location}"
@@ -165,13 +174,12 @@ resource "azurerm_virtual_machine" "demo_vm" {
     id = "${data.azurerm_image.image.id}"
   }
 
-  managed_disk_id = "${data.azurerm_image.image.id}"
-
   storage_os_disk {
-    name              = "myOsDisk"
-    caching           = "ReadWrite"
-    create_option     = "Attach"
-    managed_disk_type = "Premium_LRS"
+    name            = "${azurerm_managed_disk.test.name}"
+    managed_disk_id = "${azurerm_managed_disk.test.id}"
+    create_option   = "Attach"
+    lun             = 1
+    disk_size_gb    = "${azurerm_managed_disk.test.disk_size_gb}"
   }
 
   os_profile {
