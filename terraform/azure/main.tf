@@ -168,19 +168,13 @@ resource "azurerm_virtual_machine" "demo_vm" {
   location              = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name   = "${azurerm_resource_group.demo_resource_group.name}"
   network_interface_ids = ["${azurerm_network_interface.demo_nic.id}"]
-  upgrade_policy_mode   = "Manual"
+  vm_size               = "Standard_DS1_v2"
 
-  sku {
-    name     = "Standard_DS1_v2"
-    tier     = "Standard"
-    capacity = 2
-  }
-
-  storage_profile_image_reference {
+  storage_image_reference {
     id = "${data.azurerm_image.image.id}"
   }
 
-  storage_profile_os_disk {
+  storage_os_disk {
     name              = ""
     caching           = "ReadWrite"
     create_option     = "FromImage"
