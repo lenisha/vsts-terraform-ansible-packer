@@ -108,6 +108,46 @@ resource "azurerm_network_interface" "demo_nic" {
   }
 }
 
+resource "azurerm_lb" "vmss_lb" {
+  name                = "vmss-lb"
+  location            = "${azurerm_resource_group.demo_resource_group.location}"
+  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+
+  frontend_ip_configuration {
+    name                 = "PublicIPAddress"
+    public_ip_address_id = "${azurerm_public_ip.demo_public_ip.id}"
+  }
+
+  tags {
+    environment = "Terraform Demo"
+  }
+}
+
+resource "azurerm_lb_backend_address_pool" "bpepool" {
+  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+  loadbalancer_id     = "${azurerm_lb.vmss_lb.id}"
+  name                = "BackEndAddressPool"
+}
+
+resource "azurerm_lb_probe" "vmss_probe" {
+  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+  loadbalancer_id     = "${azurerm_lb.vmss_lb.id}"
+  name                = "ssh-running-probe"
+  port                = "80"
+}
+
+resource "azurerm_lb_rule" "lbnatrule" {
+  resource_group_name            = "${azurerm_resource_group.demo_resource_group.name}"
+  loadbalancer_id                = "${azurerm_lb.vmss_lb.id}"
+  name                           = "http"
+  protocol                       = "Tcp"
+  frontend_port                  = "80"
+  backend_port                   = "80"
+  backend_address_pool_id        = "${azurerm_lb_backend_address_pool.bpepool.id}"
+  frontend_ip_configuration_name = "PublicIPAddress"
+  probe_id                       = "${azurerm_lb_probe.vmss_probe.id}"
+}
+
 # Generate random text for a unique storage account name
 resource "random_id" "randomId" {
   keepers = {
@@ -140,44 +180,25 @@ data "azurerm_image" "image" {
   resource_group_name = "managed-images"
 }
 
-resource "azurerm_managed_disk" "test" {
-  name                 = "datadisk_existing"
-  resource_group_name  = "${azurerm_resource_group.demo_resource_group.name}"
-  location             = "${azurerm_resource_group.demo_resource_group.location}"
-  storage_account_type = "Standard_LRS"
-  create_option        = "Empty"
-  disk_size_gb         = "40"
-}
+# Create virtual machine sclae set
+resource "azurerm_virtual_machine_scale_set" "vmss" {
+  name                = "vmscaleset"
+  location            = "eastus"
+  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+  upgrade_policy_mode = "Manual"
 
-#resource "azurerm_image" "demo_image" {
-#  name                = "demoimage"
-#  location            = "${azurerm_resource_group.demo_resource_group.location}"
-#  resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
+  sku {
+    name     = "Standard_DS1_v2"
+    tier     = "Standard"
+    capacity = 2
+  }
 
-#  os_disk {
-#    os_type  = "Linux"
-#    os_state = "Generalized"
-#    blob_uri = "${var.baked_image_url}"
-#    size_gb  = 30
-#  }
-#}
-
-# Create virtual machine
-resource "azurerm_virtual_machine" "demo_vm" {
-  name                             = "packerVM"
-  location                         = "${azurerm_resource_group.demo_resource_group.location}"
-  resource_group_name              = "${azurerm_resource_group.demo_resource_group.name}"
-  network_interface_ids            = ["${azurerm_network_interface.demo_nic.id}"]
-  vm_size                          = "Standard_DS1_v2"
-  delete_os_disk_on_termination    = true
-  delete_data_disks_on_termination = true
-
-  storage_image_reference {
+  storage_profile_image_reference {
     id = "${data.azurerm_image.image.id}"
   }
 
-  storage_os_disk {
-    name              = "myOsDisk"
+  storage_profile_os_disk {
+    name              = ""
     caching           = "ReadWrite"
     create_option     = "FromImage"
     managed_disk_type = "Premium_LRS"
@@ -186,6 +207,7 @@ resource "azurerm_virtual_machine" "demo_vm" {
   os_profile {
     computer_name  = "myvm"
     admin_username = "azureuser"
+    admin_password = "Passwword1234"
   }
 
   os_profile_linux_config {
@@ -193,7 +215,18 @@ resource "azurerm_virtual_machine" "demo_vm" {
 
     ssh_keys {
       path     = "/home/azureuser/.ssh/authorized_keys"
-      key_data = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDzWnLrGQrrR/1ghPRWzRVGLi64vMv+h+Wqx1BbgjHBUJd+TmJwrt8jJn7g/lMt9v2nkPU31B5iFeJJei5E/ShPAhxss4N5/J4fP6Uxq3iXcDC9LdC3P4wdQh5bxTYN1ruQtPpmyTPrLpfK++SPu42pAiAoAWdiw7s/WXLzxNALWsl2zrpNqTK9OdrDWmDFeu7PzVGxJ3cPEhPHfxzBTmj87vN5obSGr7uHrmtDwX5+5l6UscyWLdC6q6Wbk/SW8bICfccXJua3yddtXb5sx8jSivo99qusSpE8uUrpzFz9XFlARJQWtO0fsZKnK+yxZktcGNh8FvI89AU7iW4A180z lenisha@Terraform"
+      key_data = "${file("~/.ssh/id_rsa.pub")}"
+    }
+  }
+
+  network_profile {
+    name    = "terraformnetworkprofile"
+    primary = true
+
+    ip_configuration {
+      name                                   = "IPConfiguration"
+      subnet_id                              = "${azurerm_subnet.demo_subnet.id}"
+      load_balancer_backend_address_pool_ids = ["${azurerm_lb_backend_address_pool.bpepool.id}"]
     }
   }
 
