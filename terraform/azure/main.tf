@@ -205,9 +205,9 @@ resource "azurerm_virtual_machine_scale_set" "vmss" {
   }
 
   os_profile {
-    computer_name  = "myvm"
-    admin_username = "azureuser"
-    admin_password = "Passwword1234"
+    computer_name_prefix = "myvm"
+    admin_username       = "azureuser"
+    admin_password       = "Passwword1234"
   }
 
   os_profile_linux_config {
