@@ -89,25 +89,6 @@ resource "azurerm_network_security_group" "demo_security_group" {
   }
 }
 
-# Create network interface
-resource "azurerm_network_interface" "demo_nic" {
-  name                      = "myNIC"
-  location                  = "${azurerm_resource_group.demo_resource_group.location}"
-  resource_group_name       = "${azurerm_resource_group.demo_resource_group.name}"
-  network_security_group_id = "${azurerm_network_security_group.demo_security_group.id}"
-
-  ip_configuration {
-    name                          = "myNicConfiguration"
-    subnet_id                     = "${azurerm_subnet.demo_subnet.id}"
-    private_ip_address_allocation = "dynamic"
-    public_ip_address_id          = "${azurerm_public_ip.demo_public_ip.id}"
-  }
-
-  tags {
-    environment = "Terraform Demo"
-  }
-}
-
 resource "azurerm_lb" "vmss_lb" {
   name                = "vmss-lb"
   location            = "${azurerm_resource_group.demo_resource_group.location}"
