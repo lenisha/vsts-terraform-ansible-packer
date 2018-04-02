@@ -17,3 +17,7 @@ variable "zone" {
 variable "baked_image_url" {
   default = ""
 }
+
+variable "manageddiskname" {
+  default = ""
+}
