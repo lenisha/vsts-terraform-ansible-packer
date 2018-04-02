@@ -178,7 +178,6 @@ resource "azurerm_virtual_machine" "demo_vm" {
     name            = "${azurerm_managed_disk.test.name}"
     managed_disk_id = "${azurerm_managed_disk.test.id}"
     create_option   = "Attach"
-    lun             = 1
     disk_size_gb    = "${azurerm_managed_disk.test.disk_size_gb}"
   }
 
