@@ -16,5 +16,5 @@ packer build  -var playbook_drop_path=$7 ./app.json 2>&1 | tee packer-build-outp
 
 export manageddiskname=$(cat packer-build-output.log | grep ManagedImageName: | awk '{print $2}')
 
-echo $manageddiskname
+echo "variable $manageddiskname"
 echo "##vso[task.setvariable variable=manageddiskname]$manageddiskname"
