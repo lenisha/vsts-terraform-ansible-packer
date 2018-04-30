@@ -6,4 +6,4 @@ export ARM_CLIENT_SECRET=$2
 export ARM_SUBSCRIPTION_ID=$3
 export ARM_TENANT_ID=$4
 
-terraform init  -var client_id=$1
+terraform init -backend-config=backend.tfvars

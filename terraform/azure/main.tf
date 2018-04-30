@@ -1,11 +1,7 @@
 terraform {
   required_version = ">= 0.11"
 
-  backend "azurerm" {
-    storage_account_name = "storeinfraq5nlivodfwwqmm"
-    container_name       = "terraform-state"
-    key                  = "demo-packer.terraform.tfstate"
-  }
+  backend "azurerm" {}
 }
 
 # Configure the Microsoft Azure Provider
@@ -152,6 +148,7 @@ resource "azurerm_storage_account" "demo_storage_account" {
   }
 }
 
+# Points to Packer build image 
 data "azurerm_image" "image" {
   name                = "${var.manageddiskname}"
   resource_group_name = "managed-images"
@@ -192,7 +189,7 @@ resource "azurerm_virtual_machine_scale_set" "vmss" {
 
     ssh_keys {
       path     = "/home/azureuser/.ssh/authorized_keys"
-      key_data = "${file("~/.ssh/id_rsa.pub")}"
+      key_data = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDzWnLrGQrrR/1ghPRWzRVGLi64vMv+h+Wqx1BbgjHBUJd+TmJwrt8jJn7g/lMt9v2nkPU31B5iFeJJei5E/ShPAhxss4N5/J4fP6Uxq3iXcDC9LdC3P4wdQh5bxTYN1ruQtPpmyTPrLpfK++SPu42pAiAoAWdiw7s/WXLzxNALWsl2zrpNqTK9OdrDWmDFeu7PzVGxJ3cPEhPHfxzBTmj87vN5obSGr7uHrmtDwX5+5l6UscyWLdC6q6Wbk/SW8bICfccXJua3yddtXb5sx8jSivo99qusSpE8uUrpzFz9XFlARJQWtO0fsZKnK+yxZktcGNh8FvI89AU7iW4A180z lenisha@Terraform"
     }
   }
 
