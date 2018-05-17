@@ -37,11 +37,6 @@
       "type": "shell"
     },
     {
-      "type": "file",
-      "source": "{{user `playbook_drop_path`}}/web",
-      "destination": "{{user `playbook_drop_path`}}/ansible"
-    },
-    {
       "type": "ansible-local",
       "playbook_file": "{{user `playbook_drop_path`}}/ansible/site.yml",
       "playbook_dir": "{{user `playbook_drop_path`}}/ansible"
