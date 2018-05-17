@@ -3,15 +3,11 @@ variable "credentials" {
 }
 
 variable "project" {
-  default = "terraform-consul-ansible-demo"
+  default = "terraform-ansible-demo"
 }
 
-variable "region" {
-  default = "northamerica-northeast1"
-}
-
-variable "zone" {
-  default = "northamerica-northeast1-a"
+variable "manageddiskname-rg" {
+  default = "managed-images"
 }
 
 variable "baked_image_url" {
