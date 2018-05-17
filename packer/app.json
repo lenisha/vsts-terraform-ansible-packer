@@ -39,8 +39,8 @@
     {
       "type": "ansible-local",
       "playbook_file": "{{user `playbook_drop_path`}}/ansible/site.yml",
-      "playbook_dir": "{{user `playbook_drop_path`}}/ansible"
-   
+      "playbook_dir": "{{user `playbook_drop_path`}}/ansible",
+       "playbook_paths": ["{{user `playbook_drop_path`}}/ansible", "{{user `playbook_drop_path`}}/web"]
     },       
     {
     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
