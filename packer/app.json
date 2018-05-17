@@ -39,7 +39,7 @@
     {
       "type": "ansible-local",
       "playbook_file": "{{user `playbook_drop_path`}}/ansible/site.yml",
-      "playbook_dir": "{{user `playbook_drop_path`}}"
+      "playbook_dir": "{{user `playbook_drop_path`}}/ansible"
    
     },       
     {
