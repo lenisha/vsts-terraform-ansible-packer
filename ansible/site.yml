@@ -2,9 +2,9 @@
 
 # This playbook deploys a simple standalone Tomcat 7 server.
 
-- hosts: all
+- hosts: 127.0.0.1
   become: true
-  become_method: sudo
+  connection: local
   vars:
     http_port: 8080
     https_port: 8443

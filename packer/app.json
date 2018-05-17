@@ -31,8 +31,6 @@
     {
       "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
       "inline": [
-        "sudo rpm -i epel-release-latest-7.noarch.rpm",
-        "sudo yum update",
         "sudo yum -y install ansible"
        ],
       "inline_shebang": "/bin/sh -x",
@@ -41,7 +39,8 @@
     {
       "type": "ansible-local",
       "playbook_file": "{{user `playbook_drop_path`}}/ansible/site.yml",
-      "playbook_dir": "{{user `playbook_drop_path`}}/"
+      "playbook_dir": "{{user `playbook_drop_path`}}",
+      "playbook_paths": ["{{user `playbook_drop_path`}}/ansible","{{user `playbook_drop_path`}}/web"]
     },       
     {
     "execute_command": "chmod +x {{ .Path }}; {{ .Vars }} sudo -E sh '{{ .Path }}'",
