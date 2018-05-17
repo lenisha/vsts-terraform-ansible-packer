@@ -19,3 +19,5 @@ export manageddiskname=$(cat packer-build-output.log | grep ManagedImageName: | 
 
 echo "variable $manageddiskname"
 echo "##vso[task.setvariable variable=manageddiskname]$manageddiskname"
+
+[ -z "$manageddiskname" ] && exit 1 || exit 0

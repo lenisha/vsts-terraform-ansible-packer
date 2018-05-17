@@ -33,7 +33,7 @@
       "inline": [
         "sudo rpm -i epel-release-latest-7.noarch.rpm",
         "sudo yum update",
-        "sudo yum install ansible"
+        "sudo yum -y install ansible"
        ],
       "inline_shebang": "/bin/sh -x",
       "type": "shell"
