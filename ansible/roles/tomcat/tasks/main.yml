@@ -59,7 +59,7 @@
   wait_for: path=/usr/share/tomcat/webapps/spring-music/ state=absent
   
 - name: Deploy sample app
-  copy: src=../build/libs/spring-music.war dest=/usr/share/tomcat/webapps/spring-music.war owner=tomcat group=tomcat
+  copy: src=web/build/libs/spring-music.war dest=/usr/share/tomcat/webapps/spring-music.war owner=tomcat group=tomcat
   notify: restart tomcat
 
 - name: Start Tomcat
