@@ -16,14 +16,13 @@
     "subscription_id": "{{user `subscription_id`}}",
     "tenant_id": "{{user `tenant_id`}}",
     
-  
     "os_type": "Linux",
-    "image_publisher": "Canonical",
-    "image_offer": "UbuntuServer",
-    "image_sku": "16.04.0-LTS",
+    "image_publisher": "RedHat",
+    "image_offer": "RHEL",
+    "image_sku": "7.3",
 
     "managed_image_resource_group_name": "{{user `managed_resource_group`}}",
-    "managed_image_name": "demoPackerImage-{{timestamp}}",
+    "managed_image_name": "demoPackerImage-{{isotime \"2006-01-02_03_04_05\"}}",
 
     "location": "Canada Central",
     "vm_size": "Basic_A1"
@@ -41,7 +40,7 @@
     },
     {
       "type": "ansible-local",
-      "playbook_file": "{{user `playbook_drop_path`}}/packer/apache.yml",
+      "playbook_file": "{{user `playbook_drop_path`}}/ansible/site.yml",
       "playbook_dir": "{{user `playbook_drop_path`}}/"
     },       
     {
