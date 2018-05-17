@@ -56,7 +56,6 @@ resource "azurerm_network_security_group" "demo_security_group" {
   location            = "${azurerm_resource_group.demo_resource_group.location}"
   resource_group_name = "${azurerm_resource_group.demo_resource_group.name}"
 
-
   security_rule {
     name                       = "HTTP"
     priority                   = 1002
